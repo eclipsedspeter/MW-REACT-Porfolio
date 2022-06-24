@@ -1,38 +1,78 @@
 import React, { Component } from "react";
+import axios from 'axios';
+
 import PortfolioItem from "./PortfolioItem";
 
 export default class PortfolioContainer extends Component {
-    // class based performs operations and "REACTS"
     constructor () {
         super();
 
         this.state = {
             pageTitle: "Welcome to my portfolio",
-            data: [
-                {title: "Quip"},
-                {title: "Event"},
-                {title: "Safe"},
-                {title: "Swingaway"}
-            ]
-        }
+            data: [],
+            isLoading: false
+        };
+
+        this.handleFilter = this.handleFilter.bind(this);
     }
 
+    // Pre: none
+    // Post: Retrieves portfolio items from the API... look at devcamp.space for data
+    // password for devcamp.space: CodingIsFun123!
+    getPortfolioItems () {
+        axios.get("https://maxwhipple.devcamp.space/portfolio/portfolio_items")
+        
+        .then(response => {
+            console.log(response)
+            this.setState({
+                data: response.data.portfolio_items
+            })
+        })
+
+        .catch(error => {
+            console.log(error)
+        })
+    };
+
+    // Pre: an array of portfolio items in this.state.data
+    // Post: creates a PortfolioItem with desired attributes for each element of input.array
     portfolioItems() {
-
         return this.state.data.map(el => {
-            // required by react framwork... still doesn't work properly
-            <li key={el.title}>
-                {el.title}
-            </li>
-
-            return <PortfolioItem title = {el.title} />;
+            return <PortfolioItem key={el.id} title = {el.name} url = {el.url} slug={el.id} />;
         });
     }
+
+    // Pre: takes in a filter argument
+    // Post: removes all PortfolioItems that are not === filter
+    handleFilter (filter) {
+        this.setState({
+            data: this.state.data.filter(el => {
+                return el.category === filter;
+            })
+        })
+    }
+
+    // allows access to getPortfolioItems
+    componentDidMount() {
+
+        this.getPortfolioItems();
+
+    }
+
+   
     render () {
+        if (this.state.isLoading) {
+            return <div>Loading...</div>
+        }
+
         return (
             <div>
-                <h2>Portfolio items go here...</h2>
+                <h2>{this.state.pageTitle}</h2>
                 {this.portfolioItems()}
+                <button onClick={() => this.handleFilter('eCommerce')}>eCommerce</button>
+                <button onClick={() => this.handleFilter('Sales')}>Sales</button>
+                <button onClick={() => this.handleFilter('Scheduling')}>Scheduling</button>
+
             </div>
         )
     }
