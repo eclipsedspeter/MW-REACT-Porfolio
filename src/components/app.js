@@ -30,7 +30,7 @@ export default class App extends Component {
 
         {/* Sets all paths and path links */}
         <Router>
-          <div>
+          <div className="route-nav-container">
             <NavigationContainer />
             <Switch>
               <Route exact path="/" component={Home}></Route>

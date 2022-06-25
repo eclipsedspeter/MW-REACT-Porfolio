@@ -10,7 +10,7 @@ export default class NavigationContainer extends Component {
         }
     }
     render() {
-        return (<div>
+        return (<div className="navigation-wrapper">
 
             <NavLink exact to="/" activeClassName="nav-link-active">Home</NavLink>
             <NavLink to="/about-me" activeClassName="nav-link-active">About</NavLink>

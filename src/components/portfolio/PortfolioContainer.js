@@ -38,7 +38,7 @@ export default class PortfolioContainer extends Component {
     // Post: creates a PortfolioItem with desired attributes for each element of input.array
     portfolioItems() {
         return this.state.data.map(el => {
-            return <PortfolioItem key={el.id} title = {el.name} url = {el.url} slug={el.id} />;
+            return <PortfolioItem key={el.id} title = {el.name} url = {el.url} slug={el.id} banner_image_url = {el.banner_image_url} />;
         });
     }
 
@@ -66,7 +66,7 @@ export default class PortfolioContainer extends Component {
         }
 
         return (
-            <div>
+            <div className="portfolio-item-container">
                 <h2>{this.state.pageTitle}</h2>
                 {this.portfolioItems()}
                 <button onClick={() => this.handleFilter('eCommerce')}>eCommerce</button>
