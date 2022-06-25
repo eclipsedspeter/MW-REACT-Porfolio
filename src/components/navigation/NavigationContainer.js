@@ -21,5 +21,7 @@ export default class NavigationContainer extends Component {
             {this.state.admin ? <button>Add Blog</button> : ""}
         </div>
         )
-    }
+    }s
+
+    // comment
 }
