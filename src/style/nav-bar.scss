@@ -1,0 +1,21 @@
+//nav bar
+
+.app > .route-nav-container {
+    width: 100%;
+    border: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.app > .route-nav-container > .navigation-wrapper {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+}
+
+.app > .route-nav-container > .navigation-wrapper a {
+    font-size: 40px;
+}
