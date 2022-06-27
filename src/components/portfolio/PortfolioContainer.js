@@ -10,7 +10,7 @@ export default class PortfolioContainer extends Component {
         this.state = {
             pageTitle: "",
             data: [],
-            changeable_data:[],
+            changeable_data:[], // this is the data the page shows and the data the buttons filter
             isLoading: false
         };
 
