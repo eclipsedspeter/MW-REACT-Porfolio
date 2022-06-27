@@ -8,8 +8,9 @@ export default class PortfolioContainer extends Component {
         super();
 
         this.state = {
-            pageTitle: "My portfolio",
+            pageTitle: "",
             data: [],
+            changeable_data:[],
             isLoading: false
         };
 
@@ -23,7 +24,8 @@ export default class PortfolioContainer extends Component {
         axios.get("https://maxwhipple.devcamp.space/portfolio/portfolio_items")
         .then(response => {
             this.setState({
-                data: response.data.portfolio_items
+                data: response.data.portfolio_items,
+                changeable_data : response.data.portfolio_items
             })
         })
         .catch(error => {
@@ -34,7 +36,7 @@ export default class PortfolioContainer extends Component {
     // Pre: an array of portfolio items in this.state.data
     // Post: creates a PortfolioItem with desired attributes for each element of input.array
     portfolioItems() {
-        return this.state.data.map(el => {
+        return this.state.changeable_data.map(el => {
             console.log("portfolio item", el);
             return ( <div className="portfolio-item"> <PortfolioItem key={el.id} el = {el} /> </div>
         )});
@@ -43,11 +45,20 @@ export default class PortfolioContainer extends Component {
     // Pre: takes in a filter argument
     // Post: removes all PortfolioItems that are not === filter
     handleFilter (filter) {
-        this.setState({
-            data: this.state.data.filter(el => {
-                return el.category === filter;
+        if (filter === 'RESET') {
+            this.setState({
+                changeable_data: this.state.data.map(item => {
+                    return item;
+                })
             })
-        })
+            console.log("state is set", this.state.changeable_data);
+        } else {
+            this.setState({
+                changeable_data: this.state.changeable_data.filter(el => {
+                    return el.category === filter;
+                })
+            })
+        }
     }
 
     // allows access to PortfolioItems
@@ -69,9 +80,11 @@ export default class PortfolioContainer extends Component {
                     {this.portfolioItems()}
                 </div>
                 <div className="portfolio-button-container">
-                    <button onClick={() => this.handleFilter('eCommerce')}>eCommerce</button>
-                    <button onClick={() => this.handleFilter('Sales')}>Sales</button>
-                    <button onClick={() => this.handleFilter('Scheduling')}>Scheduling</button>
+                    <button onClick={() => this.handleFilter('Technology')}>Technology</button>
+                    <button onClick={() => this.handleFilter('Education')}>Education</button>
+                    <button onClick={() => this.handleFilter('Business')}>Business</button>
+                    <button onClick={() => this.handleFilter('RESET')}>Reset</button>
+
                 </div>
             </div>
         )

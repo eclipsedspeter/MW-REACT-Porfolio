@@ -25,13 +25,14 @@ export default class App extends Component {
     return (
       <div className='app'>
 
-        <h1>My first React webpage</h1>
+        <h1>My Webpage</h1>
         <div>{moment().format('MMMM Do YYYY, h:mm:ss a')}</div>
 
         {/* Sets all paths and path links */}
         <Router>
-          <div className="route-nav-container">
-            <NavigationContainer />
+          <div className="page-container">
+            <div className='navigation-container'><NavigationContainer /></div>
+          
             <Switch>
               <Route exact path="/" component={Home}></Route>
               <Route path="/about-me" component={About}></Route>

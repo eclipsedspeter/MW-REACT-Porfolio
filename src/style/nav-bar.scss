@@ -1,21 +1,63 @@
 //nav bar
 
-.app > .route-nav-container {
-    width: 100%;
-    border: 20px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
+:root {
+    --navbar-element-spacing: 25px;
+    --transition-time: .3s;
 }
 
-.app > .route-nav-container > .navigation-wrapper {
-    width: 50%;
+.app > .page-container > .navigation-container {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: left;
+    flex-direction: row;
     margin: 10px;
 }
 
-.app > .route-nav-container > .navigation-wrapper a {
-    font-size: 40px;
+.app > .page-container > .navigation-container > .navigation-content {
+    font-size: 20px;
+    width: 100%;
+}
+
+// navigation content
+.app > .page-container > .navigation-container > .navigation-content a{
+    margin-left: var(--navbar-element-spacing);
+    margin-right: var(--navbar-element-spacing);
+    padding: 2px;
+
+    text-decoration: none;
+    color: darkgrey;
+
+    transition: all var(--transition-time);
+    border: none;
+    border-bottom: 3px solid transparent;
+
+
+
+}
+
+// navigation content button
+.app > .page-container > .navigation-container > .navigation-content button{
+    padding: 4px;
+    margin-left: var(--navbar-element-spacing);
+    margin-right: var(--navbar-element-spacing);
+
+    font-size: 19px;
+    color:darkgrey;
+    background-color: white;
+
+    border: 3px solid transparent;
+    transition: var(--transition-time);
+}
+
+// hover states
+.app > .page-container > .navigation-container > .navigation-content a:hover{
+    border-bottom: 3px solid grey;
+    color: rgb(58, 57, 57);
+    border-radius: 3px;
+}
+
+.app > .page-container > .navigation-container > .navigation-content button:hover{
+    border-bottom: 3px solid grey;
+    color: rgb(58, 57, 57);
+    border-radius: 3px;
 }

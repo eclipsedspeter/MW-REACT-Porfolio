@@ -42,7 +42,7 @@
     flex-direction: column;
     width: 93%;
     height: 93%;
-    font-weight: 300;
+    font-weight: 700;
     transition: all .3s;
  }
 .portfolio-item > .items-wrapper > .content * {
@@ -60,7 +60,6 @@
     text-decoration: none;
 }
 .portfolio-item > .items-wrapper > .content > .item-logo-container img {
-    color: white;
     transition: all .6s;
     max-width: 70%;
     max-height: 70%;
@@ -81,7 +80,7 @@
 
 // hover: final description
 .portfolio-item > .items-wrapper:hover .content> .item-description-container p {
-    color: --text-transform-color;
+    color: rgb(26, 117, 202);
     font-size: 1.8em;
     opacity: 1;
     text-decoration: none;
