@@ -17,10 +17,13 @@
     place-content: center;
     overflow: hidden;    
     border: none;
+    height: 100%;
+    padding: 0px;
 }
 
 .portfolio-item > .items-wrapper * {
     grid-area: container;
+
 }
 
 .portfolio-item > .items-wrapper > .item-image-container {
@@ -84,4 +87,11 @@
     font-size: 1.8em;
     opacity: 1;
     text-decoration: none;
+}
+
+// portfolio button spacing
+.portfolio-container > .portfolio-button-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 10px;
 }

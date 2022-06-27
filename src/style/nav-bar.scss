@@ -16,6 +16,7 @@
 .app > .page-container > .navigation-container > .navigation-content {
     font-size: 20px;
     width: 100%;
+    margin-bottom: 10px;
 }
 
 // navigation content
@@ -25,7 +26,7 @@
     padding: 2px;
 
     text-decoration: none;
-    color: darkgrey;
+    color:  rgb(116, 115, 115);
 
     transition: all var(--transition-time);
     border: none;
@@ -40,9 +41,10 @@
     padding: 4px;
     margin-left: var(--navbar-element-spacing);
     margin-right: var(--navbar-element-spacing);
+    width: auto;
 
     font-size: 19px;
-    color:darkgrey;
+    color:rgb(116, 115, 115);
     background-color: white;
 
     border: 3px solid transparent;

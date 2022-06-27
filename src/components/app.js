@@ -24,10 +24,7 @@ export default class App extends Component {
   render() {
     return (
       <div className='app'>
-
-        <h1>My Webpage</h1>
-        <div>{moment().format('MMMM Do YYYY, h:mm:ss a')}</div>
-
+        
         {/* Sets all paths and path links */}
         <Router>
           <div className="page-container">
