@@ -1,6 +1,5 @@
 :root {
-    --heading-transform-color: white;
-    --link-transform-color: white; 
+    --text-transform-color: white;
 }
 
 // homepage
@@ -8,101 +7,7 @@
 .homepage-container {
     flex: center;
     justify-items: center;
-    margin: 2px;
-}
-
-// portfolio
-
-.portfolio-container > .portfolio-item-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-
-.portfolio-item {
-    margin: 5px;
-}
-
-//overlay
-.portfolio-item > .items-wrapper {
-    display: grid;
-    grid-template: "container" 1fr;
-    place-items: center;
-    place-content: center;
-    overflow: hidden;    
-}
-
-.portfolio-item > .items-wrapper * {
-    grid-area: container;
-    max-width: 100%;
-}
-
-.portfolio-item > .items-wrapper > .item-image-container {
-    z-index: 1;
-}
-
-// content
-.portfolio-item > .items-wrapper > .content {
-    place-self: center;
-    z-index: 2;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 80%;
-    height: 80%;
-    font-size: 90%;
-    font-weight: 300;
-    transition: all 1s;
-}
-
-.portfolio-item > .items-wrapper > .content > .item-link-container a, .portfolio-item > .items-wrapper > .content > .item-description-container p  {
-    opacity: 0;
-    transition: all 1s;
-    text-decoration: none;
-    font-size: 10%;
-}
-
-
-// .portfolio-item > .items-wrapper > .content > .item-heading-container{
-//     animation-name: move;
-//     animation-duration: 2s;
-//     animation-iteration-count: infinite;
-//     animation-direction: normal;
-//     animation-play-state: paused;
-// }
-// @keyframes move {
-//     from {
-//       font-size: 0%;
-//     }
-//     to {
-//       font-size: 50px;
-//     }
-// }
-
-// hover: show content
-.portfolio-item > .items-wrapper:hover .content {
-    color: rgb(183, 226, 28);
-    background-color: rgb(65, 63, 63, 0.8);
-    font-size: 30%;
-    transform: translate(0,-2%);
-    // object-fit: cover;
-    width: 90%;
-    
-}
-
-.portfolio-item > .items-wrapper:hover .content> .item-description-container p {
-    opacity: 1;
-    color: --description-transform-color;
-    text-decoration: none;
-    font-size: 10%;
-}
-
-.portfolio-item > .items-wrapper:hover .content > .item-link-container a{
-    opacity: 1;
-    color: --link-transform-color; 
-    text-decoration: none;
-    font-size: 8%;
+    margin: 0px;
 }
 
 

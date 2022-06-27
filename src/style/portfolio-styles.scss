@@ -1,0 +1,88 @@
+// portfolio
+.portfolio-item {
+    margin: 0px;
+    margin-bottom: 0px;
+}
+
+.portfolio-container > .portfolio-item-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+//overlay
+.portfolio-item > .items-wrapper {
+    display: grid;
+    grid-template: "container" 1fr;
+    place-items: center;
+    place-content: center;
+    overflow: hidden;    
+    border: none;
+}
+
+.portfolio-item > .items-wrapper * {
+    grid-area: container;
+}
+
+.portfolio-item > .items-wrapper > .item-image-container {
+    z-index: 1;
+    height: 100%
+}
+
+.portfolio-item > .items-wrapper > .item-image-container img {
+    height: 100%;
+}
+
+// content
+.portfolio-item > .items-wrapper > .content {
+    place-self: center;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 93%;
+    height: 93%;
+    font-weight: 300;
+    transition: all .3s;
+ }
+.portfolio-item > .items-wrapper > .content * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+// starting conditions
+ .portfolio-item > .items-wrapper > .content > .item-description-container p  {
+    color: white;
+    opacity: 0;
+    transition: all .6s;
+    text-decoration: none;
+}
+.portfolio-item > .items-wrapper > .content > .item-logo-container img {
+    color: white;
+    transition: all .6s;
+    max-width: 70%;
+    max-height: 70%;
+    width: auto;
+    height: auto;
+}
+
+// hover: final content box
+.portfolio-item > .items-wrapper:hover .content {
+    background-color: rgb(65, 63, 63, 0.84);
+    // transform: translate(0,-1em);
+    object-fit: fill;
+    width: 100%;
+    height: 100%;
+
+    
+}
+
+// hover: final description
+.portfolio-item > .items-wrapper:hover .content> .item-description-container p {
+    color: --text-transform-color;
+    font-size: 1.8em;
+    opacity: 1;
+    text-decoration: none;
+}

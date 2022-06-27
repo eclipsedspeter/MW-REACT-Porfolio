@@ -26,7 +26,6 @@ export default class PortfolioContainer extends Component {
                 data: response.data.portfolio_items
             })
         })
-
         .catch(error => {
             console.log(error)
         })
@@ -36,19 +35,8 @@ export default class PortfolioContainer extends Component {
     // Post: creates a PortfolioItem with desired attributes for each element of input.array
     portfolioItems() {
         return this.state.data.map(el => {
-            console.log("portfolio item", el)
-            return ( <div className="portfolio-item">
-            
-                <PortfolioItem 
-                key={el.id} 
-                title = {el.name} 
-                url = {el.url} 
-                slug={el.id} 
-                banner_image_url = {el.banner_image_url} 
-                description = {el.description}
-                />
-                
-            </div>
+            console.log("portfolio item", el);
+            return ( <div className="portfolio-item"> <PortfolioItem key={el.id} el = {el} /> </div>
         )});
     }
 
@@ -62,11 +50,9 @@ export default class PortfolioContainer extends Component {
         })
     }
 
-    // allows access to getPortfolioItems
+    // allows access to PortfolioItems
     componentDidMount() {
-
         this.getPortfolioItems();
-
     }
 
    
@@ -82,7 +68,7 @@ export default class PortfolioContainer extends Component {
                 <div className="portfolio-item-container">
                     {this.portfolioItems()}
                 </div>
-                <div className="porttoflio-button-container">
+                <div className="portfolio-button-container">
                     <button onClick={() => this.handleFilter('eCommerce')}>eCommerce</button>
                     <button onClick={() => this.handleFilter('Sales')}>Sales</button>
                     <button onClick={() => this.handleFilter('Scheduling')}>Scheduling</button>
