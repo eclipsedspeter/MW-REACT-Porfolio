@@ -37,7 +37,6 @@ export default class PortfolioContainer extends Component {
     // Post: creates a PortfolioItem with desired attributes for each element of input.array
     portfolioItems() {
         return this.state.changeable_data.map(el => {
-            console.log("portfolio item", el);
             return ( <div className="portfolio-item"> <PortfolioItem key={el.id} el = {el} /> </div>
         )});
     }
