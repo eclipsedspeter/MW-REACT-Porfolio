@@ -3,15 +3,24 @@ import { NavLink } from "react-router-dom";
 
 
 export default class NavigationContainer extends Component {
-    constructor () {
-        super();
+    constructor (props) {
+        super(props);
         this.state = {
-            admin: true
+            admin: this.props.admin,
+            loggedInStatus: this.props.loggedInStatus
+        };
+    }
+
+    componentWillReceiveProps (newProps) {
+        if(this.admin !== newProps.admin) {
+            this.setState({
+                admin: newProps.admin
+            })
         }
     }
+
     render() {
         return (<div className="navigation-content">
-
             <NavLink exact to="/" activeClassName="nav-link-active">Home</NavLink>
             <NavLink to="/about-me" activeClassName="nav-link-active">About Me</NavLink>
             <NavLink to="/contact" activeClassName="nav-link-active">Contact</NavLink>

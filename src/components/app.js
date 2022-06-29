@@ -23,6 +23,7 @@ export default class App extends Component {
     super(props);
     this.state = {
       loggedInStatus: "NOT_LOGGED_IN",
+      admin: false
     }
     this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
     this.handleUnSuccessfulLogin = this.handleUnSuccessfulLogin.bind(this);
@@ -31,13 +32,15 @@ export default class App extends Component {
 
   handleSuccessfulLogin() {
     this.setState({
-      loggedInStatus: "LOGGED_IN"
+      loggedInStatus: "LOGGED_IN",
+      admin: true
     })
   }
 
   handleUnSuccessfulLogin() {
     this.setState({
-      loggedInStatus: "NOT_LOGGED_IN"
+      loggedInStatus: "NOT_LOGGED_IN",
+      admin: false
     })
   }
 
@@ -49,7 +52,7 @@ export default class App extends Component {
         <Router>
           <div className="page-container">
             <div className='navigation-container'>
-              <NavigationContainer />
+              <NavigationContainer admin={this.state.admin}/>
               <h2>{this.state.loggedInStatus}</h2> 
             </div>
           

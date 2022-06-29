@@ -10,11 +10,16 @@ export default function(props) {
     function handleClick(){
         history.push(`portfolio/${id}`)
     }
+
+    // this is making the image its own componenet to prevent re-rendering after state update
+    const Image = React.memo(function Image({ src }) {
+        return <img src={src} className="spinner" />;
+    });
     
     return (
         <button className="items-wrapper" type="button" onClick={handleClick}> 
             <div className="item-image-container">
-                    {thumb_image_url !== null ? <img src={thumb_image_url}></img> : ""}
+                    {thumb_image_url !== null ? <Image src={thumb_image_url} /> : ""}
                 </div>
             <div className="content">
                 <div className="item-logo-container">
