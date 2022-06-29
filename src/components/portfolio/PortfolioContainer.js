@@ -37,22 +37,23 @@ export default class PortfolioContainer extends Component {
     // Post: creates a PortfolioItem with desired attributes for each element of input.array
     portfolioItems() {
         return this.state.changeable_data.map(el => {
-            return ( <div className="portfolio-item"> <PortfolioItem key={el.id} el = {el} /> </div>
+            return ( <div className="portfolio-item" key={el.id}> <PortfolioItem key={el.id} el = {el} /> </div>
         )});
     }
 
-    // Pre: takes in a filter argument
-    // Post: removes all PortfolioItems that are not === filter
+    // Pre: takes in a filter argument which is either "RESET" or a data category found in API
+    // Post: removes all PortfolioItems that are not === filter or resets data
     handleFilter (filter) {
         if (filter === 'RESET') {
+            // shows all data
             this.setState({
                 changeable_data: this.state.data.map(item => {
                     return item;
                 })
             })
-            console.log("state is set", this.state.changeable_data);
         } else {
             this.setState({
+                // filters requested data
                 changeable_data: this.state.changeable_data.filter(el => {
                     return el.category === filter;
                 })

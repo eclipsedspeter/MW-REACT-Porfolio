@@ -1,38 +1,45 @@
-import React, { Component } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+import { withRouter } from "react-router";
 
 
-export default class NavigationContainer extends Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            admin: this.props.admin,
-            loggedInStatus: this.props.loggedInStatus
-        };
+const NavigationContainer = props => {
+
+    const handleLogOut = () => {
+        console.log("signout button pressed")
+        axios.delete("https://api.devcamp.space/logout", {withCredentials: true})
+        .then(response => {
+            if(response.status === 200) {
+                props.history.push("/");
+                props.handleSignOut();
+            }
+            return response.data
+        }).catch(error => {
+            console.log("error signing out", error);
+        })
     }
 
-    componentWillReceiveProps (newProps) {
-        if(this.admin !== newProps.admin) {
-            this.setState({
-                admin: newProps.admin
-            })
-        }
+    const dynamicLink = (route, linkText)  => {
+      return <NavLink to={`${route}`} activeClassName="nav-link-active">{linkText}</NavLink>
     }
-
-    render() {
-        return (<div className="navigation-content">
+    
+    return (
+        <div className="navigation-content">
             <NavLink exact to="/" activeClassName="nav-link-active">Home</NavLink>
             <NavLink to="/about-me" activeClassName="nav-link-active">About Me</NavLink>
             <NavLink to="/contact" activeClassName="nav-link-active">Contact</NavLink>
             <NavLink to="/blog" activeClassName="nav-link-active">Blog</NavLink>
             
             {/* Checks to see if user is admin and if so, renders "add blog" button */}
-            {this.state.admin ? <button>Blogs Manager</button> : ""}
-            {this.state.admin ? <button>Portfolio Manager</button> : ""}
+            {props.admin ? dynamicLink("/blog-manager", "Blog | M") : ""}
+            {props.admin ? dynamicLink("/portfolio-manager", "Portfolio | M") : ""}
+
+            {props.admin ? <button onClick={handleLogOut}>Sign Out</button> : ""}
+            {/* <button onClick={handleLogOut}>Sign Out</button> */}
 
         </div>
-        )
-    }s
+    )};
 
-    // comment
-}
+
+export default withRouter(NavigationContainer);

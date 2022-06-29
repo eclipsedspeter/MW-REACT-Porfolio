@@ -45,7 +45,7 @@
     flex-direction: column;
     width: 93%;
     height: 93%;
-    font-weight: 700;
+    font-weight: 400;
     transition: all .3s;
  }
 .portfolio-item > .items-wrapper > .content * {
@@ -83,7 +83,7 @@
 
 // hover: final description
 .portfolio-item > .items-wrapper:hover .content> .item-description-container p {
-    color: rgb(26, 117, 202);
+    color: rgb(106, 183, 255);
     font-size: 1.8em;
     opacity: 1;
     text-decoration: none;

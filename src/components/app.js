@@ -4,7 +4,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import moment from "moment";
+import axios from 'axios';
 
 
 
@@ -16,6 +16,9 @@ import Blog from "./pages/blog";
 import PortfolioDetail from './portfolio/PortfolioDetail';
 import Auth from './pages/auth';
 import NoMatch from './pages/noMatch';
+import BlogManager from './pages/blogManager';
+import PortfolioManager from './pages/portfolioManager';
+
 
 
 export default class App extends Component {
@@ -27,7 +30,7 @@ export default class App extends Component {
     }
     this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
     this.handleUnSuccessfulLogin = this.handleUnSuccessfulLogin.bind(this);
-
+    this.handleSignOut = this.handleSignOut.bind(this);
   }
 
   handleSuccessfulLogin() {
@@ -44,6 +47,48 @@ export default class App extends Component {
     })
   }
 
+  checkLoginStatus() {
+    return axios.get('https://api.devcamp.space/logged_in', { withCredentials: true })
+    .then(response => {
+      const loggedIn = response.data.logged_in;
+      const loggedInStatus = this.state.loggedInStatus
+      if(loggedIn && loggedInStatus === "LOGGED_IN") {
+          return loggenIn;
+        }
+      else if (loggedIn && loggedInStatus === "NOT_LOGGED_IN") {
+        this.setState({
+          loggedInStatus: "LOGGED_IN",
+          admin: true
+        })
+      } else if (!loggedIn && loggedInStatus === "LOGGED_IN") {
+        this.setState({
+          loggedInStatus: "NOT_LOGGED_IN",
+          admin: false
+        })
+      } 
+    }).catch(error => {
+      console.log(error);
+    })
+  }
+
+  handleSignOut() {
+    this.setState({
+      loggedInStatus: "NOT_LOGGED_IN",
+      admin: false,
+    })
+  }
+
+  componentDidMount() {
+    this.checkLoginStatus();
+  }
+
+  authorizedRoutes () {
+    return [
+      <Route path="/blog-manager" component={BlogManager}></Route>,
+      <Route path="/portfolio-manager" component={PortfolioManager}></Route>
+    ]
+  }
+
   render() {
     return (
       <div className='app'>
@@ -52,8 +97,10 @@ export default class App extends Component {
         <Router>
           <div className="page-container">
             <div className='navigation-container'>
-              <NavigationContainer admin={this.state.admin}/>
-              <h2>{this.state.loggedInStatus}</h2> 
+              <NavigationContainer 
+                handleSignOut ={this.handleSignOut}
+                admin = {this.state.admin}
+               />
             </div>
           
             <Switch>
@@ -61,6 +108,7 @@ export default class App extends Component {
               <Route path="/about-me" component={About}></Route>
               <Route path="/blog" component={Blog}></Route>
               <Route path="/contact" component={Contact}></Route>
+              {this.state.admin ? this.authorizedRoutes() : null}
 
               <Route 
                 exact path="/auth"
