@@ -5,6 +5,8 @@ import {
   Route
 } from "react-router-dom";
 import moment from "moment";
+import axios from 'axios';
+
 
 
 
@@ -23,7 +25,9 @@ export default class App extends Component {
     super(props);
     this.state = {
       loggedInStatus: "NOT_LOGGED_IN",
-      admin: false
+      admin: false,
+      data: [],
+      changeable_data: []
     }
     this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
     this.handleUnSuccessfulLogin = this.handleUnSuccessfulLogin.bind(this);
@@ -44,6 +48,29 @@ export default class App extends Component {
     })
   }
 
+  // Pre: none
+  // Post: Retrieves portfolio items from the API... look at devcamp.space for data
+  // password for devcamp.space: CodingIsFun123!
+  getPortfolioItems () {
+    axios.get("https://maxwhipple.devcamp.space/portfolio/portfolio_items")
+    .then(response => {
+        this.setState({
+            data: response.data.portfolio_items,
+            changeable_data : response.data.portfolio_items
+        })
+    })
+    .catch(error => {
+        console.log(error)
+    })
+  };
+
+      // allows access to PortfolioItems
+      componentDidMount() {
+        this.getPortfolioItems();
+    }
+
+
+
   render() {
     return (
       <div className='app'>
@@ -57,7 +84,13 @@ export default class App extends Component {
             </div>
           
             <Switch>
-              <Route exact path="/" component={Home}></Route>
+              <Route exact path="/" render={props => (
+                <Home 
+                data={this.state.data} 
+                changeable_data={this.state.changeable_data}
+                />)}
+                ></Route>
+                
               <Route path="/about-me" component={About}></Route>
               <Route path="/blog" component={Blog}></Route>
               <Route path="/contact" component={Contact}></Route>

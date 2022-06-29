@@ -2,10 +2,10 @@ import React from "react";
 import PortfolioContainer from "../portfolio/PortfolioContainer";
 
 
-export default function () {
+export default function (props) {
     return (
         <div className="homepage-container">
-            <PortfolioContainer />
+            <PortfolioContainer data={props.data} changeable_data={props.changeable_data} />
         </div>
 
     )
