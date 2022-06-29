@@ -3,7 +3,8 @@ import React from "react";
 export default function (props) {
     return (
         <div>
-            <h2>PortfolioDetail for {props.match.params.slug}</h2>
+            <h2>PortfolioDetail for {props.data}</h2>
+            {console.log(props.data)}
         </div>
     );
 }

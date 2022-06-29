@@ -90,7 +90,7 @@ export default class App extends Component {
                 changeable_data={this.state.changeable_data}
                 />)}
                 ></Route>
-                
+
               <Route path="/about-me" component={About}></Route>
               <Route path="/blog" component={Blog}></Route>
               <Route path="/contact" component={Contact}></Route>
@@ -107,7 +107,12 @@ export default class App extends Component {
                 ></Route>
 
 
-              <Route exact path="/portfolio/:slug" component={PortfolioDetail}></Route>
+              <Route exact path="/portfolio/:slug" render={props => (
+                <PortfolioDetail
+                  {...props}
+                  data={this.data}/>
+              )}
+              ></Route>
 
               {/* Catch all route...*/}
               <Route component={NoMatch}></Route>
