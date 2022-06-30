@@ -1,0 +1,20 @@
+.side-bar {
+    width: 33%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.portfolio-sidebar-list-wrapper {
+    width: 100%;
+    place-self: right;
+    background-color: grey;
+    .portfolio-item-thumb {
+        padding: 21px;
+        .portfolio-thumb-img img{
+            width: 100%;
+        }
+    .title {
+        color: rgb(252, 249, 249);
+    }
+    }
+}
