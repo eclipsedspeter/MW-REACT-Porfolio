@@ -50,21 +50,7 @@
                     padding: 0px;
                     padding-left: 15px;
                 }
-
-                .category-dropdown-content h1 {
-                    display: block;
-                    font-size: 100%;
-                    font-weight: 400;
-                    max-width: 80px;
-                    margin: 0px;
-                    padding: 0px;
-                }
-                .category-dropdown-content h1:hover {
-                    background-color: darkgrey;
-                }
-
-                }
-            }
+            
             .left-column-wrapper {
                 grid-area: l;
             }
@@ -72,6 +58,7 @@
                 grid-area: b;
             }
         }
+    }
     
     .form-container {
         // shows content when hovered
@@ -82,4 +69,4 @@
             border: 2px solid darkcyan;
         }
     }
-}
+    } }

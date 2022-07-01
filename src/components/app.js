@@ -26,7 +26,8 @@ export default class App extends Component {
     super(props);
     this.state = {
       loggedInStatus: "NOT_LOGGED_IN",
-      admin: false
+      admin: false,
+      updateGrid: false
     }
     this.handleSuccessfulLogin = this.handleSuccessfulLogin.bind(this);
     this.handleUnSuccessfulLogin = this.handleUnSuccessfulLogin.bind(this);
@@ -70,7 +71,8 @@ export default class App extends Component {
       console.log(error);
     })
   }
-
+  
+  // signs out
   handleSignOut() {
     this.setState({
       loggedInStatus: "NOT_LOGGED_IN",
@@ -85,7 +87,11 @@ export default class App extends Component {
   authorizedRoutes () {
     return [
       <Route path="/blog-manager" component={BlogManager} key="blog-manager"></Route>,
-      <Route path="/portfolio-manager" component={PortfolioManager} key="portfolio-manager"></Route>
+      <Route path="/portfolio-manager" render={props => (
+        <PortfolioManager 
+          {...props}
+        />
+        )} key="portfolio-manager"></Route>
     ]
   }
 
@@ -104,10 +110,17 @@ export default class App extends Component {
             </div>
           
             <Switch>
-              <Route exact path="/" component={Home}></Route>
+              <Route exact path="/" render= {props => (
+                <Home 
+                {...props}
+                updateGrid = {this.state.updateGrid} // homepage -> portfolio-container to look at API again to gather the new portfolio item
+                />
+              )}></Route>
+              
               <Route path="/about-me" component={About}></Route>
               <Route path="/blog" component={Blog}></Route>
               <Route path="/contact" component={Contact}></Route>
+
               {this.state.admin ? this.authorizedRoutes() : null}
 
               <Route 

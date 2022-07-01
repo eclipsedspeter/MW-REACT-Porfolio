@@ -5,11 +5,10 @@ export default class PortfolioForm extends Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
             name: "",
             description: "",
-            category: "Category",
+            category: "",
             position: 0,
             url: "",
             banner_image: "",
@@ -21,7 +20,7 @@ export default class PortfolioForm extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleOnSubmit = this.handleOnSubmit.bind(this);
-        this.handleDropdownSelection = this.handleDropdownSelection.bind(this)
+        // this.handleDropdownSelection = this.handleDropdownSelection.bind(this)
         this.buildForm = this.buildForm.bind(this);
     }
 
@@ -48,7 +47,7 @@ export default class PortfolioForm extends Component {
         formData.append("portfolio_item[description]", this.state.description);
         formData.append("portfolio_item[category]", this.state.category);
         formData.append("portfolio_item[url]", this.state.url);
-        formData.append("protfolio_item[position]", this.state.position)
+        formData.append("portfolio_item[position]", this.state.position)
 
         return formData
 
@@ -57,10 +56,11 @@ export default class PortfolioForm extends Component {
     // Pre: none
     // Post: When the submit button is pressed, the form is submitted. 
     handleOnSubmit(event) {
+        event.preventDefault();
         // https://maxwhipple.devcamp.space/portfolio/portfolio_items
         axios.post("https://maxwhipple.devcamp.space/portfolio/portfolio_items", this.buildForm(), { withCredentials: true })
         .then(response => {
-            console.log(response)
+            this.props.handleSuccessfulFormSubmission(response.data.portfolio_item);
         }).catch(error => {
             console.log(error)
         })
@@ -74,19 +74,13 @@ export default class PortfolioForm extends Component {
         })
     }
 
-    //Pre: None
-    //Post: Updates state according to which dropdown button was pressed
-    handleDropdownSelection(event) {
-        this.setState({
-            category: event.target.id
-        })
-    }
-
-
     // runs only when the new data has been sent it
     componentDidUpdate (prevProps, prevState) {
         if(prevProps !== this.props){
             this.generateUniqueCategories(this.props.portfolioItems);
+            this.setState({
+                category: this.props.portfolioItems[0].category
+            })
         }
     }
 
@@ -121,16 +115,14 @@ export default class PortfolioForm extends Component {
                         onChange={this.handleChange}/>
 
                         <div className="dropdown-wrapper">
-                            <button className="category-dropdown-btn">{this.state.category}</button>
-                            <div className="category-dropdown-content">
-
-                                {/* generates a unique set of buttons */}
+                            <select name="category" value={this.state.category} onChange={this.handleChange}>
                                 {this.state.dropdown_categories.map(el => {
-                                    return(<button type="button" id={el} key={el} onClick={this.handleDropdownSelection}>{el}</button>)
-                                })}
+                                    return(<option vale={el} key={el} onClick={this.handleDropdownSelection}>{el}</option>)
+                                    })}
+                            </select>
+                               
 
                             </div>
-                        </div>
                     </div>
                     <div className="bottom-area-wrapper">
                         <textarea type="text"
@@ -140,7 +132,7 @@ export default class PortfolioForm extends Component {
                         onChange={this.handleChange}
                         />
 
-                        <button type="submit">Submit</button>
+                        <button type="submit" onClick={this.handleOnSubmit}>Submit</button>
                     </div>
 
                 </form>

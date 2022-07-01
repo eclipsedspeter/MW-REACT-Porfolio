@@ -4,8 +4,8 @@ import PortfolioSidebarList from "../portfolio/portfolio-sidebar-list";
 import Form from "../portfolio/portfolio-forms/form";
 
 export default class PortfolioManager extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             portfolioItems: []
         }
@@ -13,19 +13,20 @@ export default class PortfolioManager extends Component {
         this.getItems = this.getItems.bind(this);
         this.handleSuccessfulFormSubmission = this.handleSuccessfulFormSubmission.bind(this)
         this.handleFormSubmissionError = this.handleFormSubmissionError.bind(this);
-        // this.getPortfolioList = this.getPortfolioList.bind(this);
     }
 
     handleSuccessfulFormSubmission (portfolioItem) {
-
+        this.setState({
+            portfolioItems: [portfolioItem].concat(this.state.portfolioItems)
+        })
     }
 
     handleFormSubmissionError(error) {
-        console.log('error')
+        console.log(error)
     }
         
     getItems () {
-        axios.get("https://maxwhipple.devcamp.space/portfolio/portfolio_items",    
+        axios.get("https://maxwhipple.devcamp.space/portfolio/portfolio_items?order_by=created_at&direction=desc",    
         {withCredentials: true})
         
         .then(response => {
@@ -42,10 +43,11 @@ export default class PortfolioManager extends Component {
     render (){
         return (
             <div className="portfolioManagerpage-container">
-                <Form
+                <Form 
                     handleFormSubmissionError = {this.handleFormSubmissionError}
                     handleSuccessfulFormSubmission = {this.handleSuccessfulFormSubmission} 
-                    portfolioItems = {this.state.portfolioItems}/>
+                    portfolioItems = {this.state.portfolioItems}
+                    />
 
                 <div className="side-bar">
                     <PortfolioSidebarList data={this.state.portfolioItems}/>

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from 'axios';
 
 import PortfolioItem from "./PortfolioItem";
+import { relativeTimeThreshold } from "moment";
 
 export default class PortfolioContainer extends Component {
     constructor () {
@@ -11,7 +12,8 @@ export default class PortfolioContainer extends Component {
             pageTitle: "",
             data: [],
             changeable_data:[], // this is the data the page shows and the data the buttons filter
-            isLoading: false
+            isLoading: false,
+            updateGrid: false
         };
 
         this.handleFilter = this.handleFilter.bind(this);
@@ -65,7 +67,6 @@ export default class PortfolioContainer extends Component {
     componentDidMount() {
         this.getPortfolioItems();
     }
-
    
     render () {
         if (this.state.isLoading) {
@@ -84,6 +85,7 @@ export default class PortfolioContainer extends Component {
 
                 <div className="portfolio-item-container">
                     {this.portfolioItems()}
+                    
                 </div>
                
             </div>
