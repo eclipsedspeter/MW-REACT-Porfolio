@@ -84,8 +84,8 @@ export default class App extends Component {
 
   authorizedRoutes () {
     return [
-      <Route path="/blog-manager" component={BlogManager}></Route>,
-      <Route path="/portfolio-manager" component={PortfolioManager}></Route>
+      <Route path="/blog-manager" component={BlogManager} key="blog-manager"></Route>,
+      <Route path="/portfolio-manager" component={PortfolioManager} key="portfolio-manager"></Route>
     ]
   }
 

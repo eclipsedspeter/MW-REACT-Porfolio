@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 
 export default class PortfolioForm extends Component {
 
@@ -8,7 +9,7 @@ export default class PortfolioForm extends Component {
         this.state = {
             name: "",
             description: "",
-            category: "",
+            category: "Category",
             position: 0,
             url: "",
             banner_image: "",
@@ -20,39 +21,78 @@ export default class PortfolioForm extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleOnSubmit = this.handleOnSubmit.bind(this);
-        this.testFunc = this.testFunc.bind(this);
-
+        this.handleDropdownSelection = this.handleDropdownSelection.bind(this)
+        this.buildForm = this.buildForm.bind(this);
     }
 
-    handleOnSubmit() {
-        console.log('Ran')
-    }
-
-    testFunc() {
+    // The dropdown menu uses this data
+    // Pre: takes in the portfolio items
+    // Post: finds each unique category and updates state
+    generateUniqueCategories(items) {
+        var unique = []
+        var length_ar = items.length
+        for(let i = 0; i < length_ar; i++) {
+            var temp_category = items[i].category
+            if(!unique.includes(temp_category)){unique.push(temp_category)}
+        }
         this.setState({
-            dropdown_categories: "buisiness"
+            dropdown_categories: unique
         })
-        console.log(this.state.dropdown_categories)
     }
 
+    // Pre: Uses this.state
+    // Post: Builds out a FormData sheet with this.state information which can communicate with the API
+    buildForm() {
+        let formData = new FormData();
+        formData.append("portfolio_item[name]", this.state.name);
+        formData.append("portfolio_item[description]", this.state.description);
+        formData.append("portfolio_item[category]", this.state.category);
+        formData.append("portfolio_item[url]", this.state.url);
+        formData.append("protfolio_item[position]", this.state.position)
+
+        return formData
+
+    }
+
+    // Pre: none
+    // Post: When the submit button is pressed, the form is submitted. 
+    handleOnSubmit(event) {
+        // https://maxwhipple.devcamp.space/portfolio/portfolio_items
+        axios.post("https://maxwhipple.devcamp.space/portfolio/portfolio_items", this.buildForm(), { withCredentials: true })
+        .then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    // Pre: None
+    // Post: When any of the inputs are changed, it updates state according
     handleChange(event) {
         this.setState({
             [event.target.name]: event.target.value
         })
-        console.log(this.state)
     }
 
+    //Pre: None
+    //Post: Updates state according to which dropdown button was pressed
+    handleDropdownSelection(event) {
+        this.setState({
+            category: event.target.id
+        })
+    }
+
+
+    // runs only when the new data has been sent it
     componentDidUpdate (prevProps, prevState) {
-        // break condition
-        if(prevState.portfolioItems !== this.state.portfolioItems){
-            console.log("updated", this.props.portfolioItems)
-            this.testFunc();
+        if(prevProps !== this.props){
+            this.generateUniqueCategories(this.props.portfolioItems);
         }
     }
 
     render () {
         return (
-                <form className="form-container">
+                <form className="form-container" onSubmit={this.handleOnSubmit}>
 
                     <div className="left-column-wrapper">
                         <input 
@@ -68,7 +108,7 @@ export default class PortfolioForm extends Component {
                         pattern = "\d*"
                         placeholder="Portfolio position"
                         value={this.state.position}
-                        onChange={this.handleChange} // fix this
+                        onChange={this.handleChange}
                         />
                     </div>
 
@@ -81,8 +121,13 @@ export default class PortfolioForm extends Component {
                         onChange={this.handleChange}/>
 
                         <div className="dropdown-wrapper">
-                            <button className="category-dropdown-btn">Category</button>
+                            <button className="category-dropdown-btn">{this.state.category}</button>
                             <div className="category-dropdown-content">
+
+                                {/* generates a unique set of buttons */}
+                                {this.state.dropdown_categories.map(el => {
+                                    return(<button type="button" id={el} key={el} onClick={this.handleDropdownSelection}>{el}</button>)
+                                })}
 
                             </div>
                         </div>

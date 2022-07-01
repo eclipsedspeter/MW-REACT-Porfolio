@@ -5,7 +5,7 @@ const portfolioSidebarList = props => {
 
     const itemList = props.data.map(portfolioItem => {
         return (
-            <div className="portfolio-item-thumb">
+            <div className="portfolio-item-thumb" key={portfolioItem.name}>
               <div className="portfolio-thumb-img">
                 <img src={portfolioItem.thumb_image_url} />
               </div>
