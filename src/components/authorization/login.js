@@ -26,8 +26,7 @@ export default class Login extends Component{
         { withCredentials: true }
         ).then(response => {
             if(response.data.status === "created") {
-                console.log("access granted")
-                this.props.handleSuccessfulAuth();
+               this.props.handleSuccessfulAuth();
             } else {
                 this.setState({
                     errorText: "wrong email or password"
@@ -43,7 +42,7 @@ export default class Login extends Component{
             this.props.handleUnSuccessfulAuth();
 
         });
-        event.preventDefault();
+        event.preventDefault(); // prevents page refresh when form is submitted
     }
 
     handleChange(event){

@@ -6,6 +6,10 @@ import {
 } from "react-router-dom";
 import axios from 'axios';
 
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+
 
 
 import NavigationContainer from './navigation/NavigationContainer';
@@ -19,6 +23,7 @@ import NoMatch from './pages/noMatch';
 import BlogManager from './pages/blogManager';
 import PortfolioManager from './pages/portfolioManager';
 
+library.add(faTrash, faSignOutAlt);
 
 
 export default class App extends Component {
@@ -51,22 +56,27 @@ export default class App extends Component {
   checkLoginStatus() {
     return axios.get('https://api.devcamp.space/logged_in', { withCredentials: true })
     .then(response => {
-      const loggedIn = response.data.logged_in;
-      const loggedInStatus = this.state.loggedInStatus
-      if(loggedIn && loggedInStatus === "LOGGED_IN") {
-          return loggenIn;
-        }
-      else if (loggedIn && loggedInStatus === "NOT_LOGGED_IN") {
+      const loggedInPrev = response.data.logged_in; // previous session, boolean
+      const loggedInStatus = this.state.loggedInStatus // this session
+
+      if(loggedInPrev && loggedInStatus === "LOGGED_IN") {
+          return true;
+
+      } else if (loggedInPrev && loggedInStatus === "NOT_LOGGED_IN") {
         this.setState({
           loggedInStatus: "LOGGED_IN",
           admin: true
         })
-      } else if (!loggedIn && loggedInStatus === "LOGGED_IN") {
+        return true
+
+      } else if (!loggedInPrev && loggedInStatus === "LOGGED_IN") {
         this.setState({
           loggedInStatus: "NOT_LOGGED_IN",
           admin: false
         })
+        return false 
       } 
+
     }).catch(error => {
       console.log(error);
     })
@@ -84,14 +94,11 @@ export default class App extends Component {
     this.checkLoginStatus();
   }
 
+  // hidden routes only admin===true can access
   authorizedRoutes () {
     return [
       <Route path="/blog-manager" component={BlogManager} key="blog-manager"></Route>,
-      <Route path="/portfolio-manager" render={props => (
-        <PortfolioManager 
-          {...props}
-        />
-        )} key="portfolio-manager"></Route>
+      <Route path="/portfolio-manager" component={PortfolioManager} key="portfolio-manager"></Route>
     ]
   }
 
@@ -110,13 +117,7 @@ export default class App extends Component {
             </div>
           
             <Switch>
-              <Route exact path="/" render= {props => (
-                <Home 
-                {...props}
-                updateGrid = {this.state.updateGrid} // homepage -> portfolio-container to look at API again to gather the new portfolio item
-                />
-              )}></Route>
-              
+              <Route exact path="/" component={Home}></Route>
               <Route path="/about-me" component={About}></Route>
               <Route path="/blog" component={Blog}></Route>
               <Route path="/contact" component={Contact}></Route>

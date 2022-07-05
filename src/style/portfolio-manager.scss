@@ -8,7 +8,6 @@
         grid-template-columns: 1fr;
         margin-bottom: 2em;
         width: 95%;
-        font-size: 20px;
         padding: 15px;
         margin: 10px;
     }
@@ -23,50 +22,38 @@
         height: 100%;
         margin: 20px;
 
-        font-family: "Titillium Web", sans-serif;
-
         .right-column-wrapper { 
             grid-area: r;
-
-            .dropdown-wrapper {
-                position: relative;
-                display: inline-block;
-                margin: 0px;
-                padding: 0px;
-                align-items: center;
-                .category-dropdown-btn {
-                    border: 2px solid transparent;
-                    width: 80px;
-                    transition: all .2s;
-                    background-color: transparent;
-                }
-
-                .category-dropdown-content {
-                    display: none;
-                    position: absolute;
-                    z-index: 1;
-                    margin: 0px;
-                    margin-left: 10px; // these must match the styles in form *... keeps the box alined
-                    padding: 0px;
-                    padding-left: 15px;
-                }
-            
-            .left-column-wrapper {
-                grid-area: l;
-            }
-            .bottom-area-wrapper{
-                grid-area: b;
-            }
         }
-    }
     
-    .form-container {
-        // shows content when hovered
-        .dropdown-wrapper:hover .category-dropdown-content {
-            display: block;
+        .left-column-wrapper {
+            grid-area: l;
         }
-        .dropdown-wrapper:hover .category-dropdown-btn {
-            border: 2px solid darkcyan;
+        .bottom-area-wrapper{
+            grid-area: b;
+        }
+
+        .right-column-wrapper select,input {
+            @include base-input();
+        }
+        
+        .left-column-wrapper input {
+            @include base-input();
+        }
+
+        .bottom-area-wrapper textarea {
+            @include base-input();
+        }
+
+        .bottom-area-wrapper > .image-uploaders {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bottom-area-wrapper button {
+            width: 20%; 
+            @include base-input();
         }
     }
-    } }
+}
+

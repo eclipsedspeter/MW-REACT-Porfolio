@@ -8,13 +8,27 @@
     width: 100%;
     place-self: right;
     background-color: grey;
+
     .portfolio-item-thumb {
         padding: 21px;
-        .portfolio-thumb-img img{
-            width: 100%;
+    }
+    .portfolio-thumb-img img{
+        width: 100%;
+    }
+
+    .portfolio-item-thumb > .title-icon {
+            font-size: 11px;
+            color: rgb(252, 249, 249);
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            align-items: center;
+            width: 95%;
+            transition: all .3s;
         }
-    .title {
-        color: rgb(252, 249, 249);
     }
+
+    #sidebar-delete-icon:hover {
+        color: rgb(35, 176, 211);
+        font-size: 12px;
     }
-}
