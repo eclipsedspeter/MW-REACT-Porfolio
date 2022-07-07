@@ -50,6 +50,22 @@
             justify-content: space-between;
         }
 
+        .bottom-area-wrapper > .image-uploaders > .replaced-image-link a {
+            cursor: zoom-in;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0px;
+        }
+
+        .bottom-area-wrapper > .image-uploaders > .replaced-image-link img {
+            object-fit: fill;
+            padding: 0px;
+            margin: 0px;
+            width: 100%;
+        }
+
+
         .bottom-area-wrapper button {
             width: 20%; 
             @include base-input();

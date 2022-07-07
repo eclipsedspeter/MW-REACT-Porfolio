@@ -10,9 +10,8 @@ export default class PortfolioForm extends Component {
     constructor(props) {
         super(props);
 
-        this.portfolioItems = [...this.props.portfolioItems]
-
         this.state = {
+            id: 0,
             name: "",
             description: "",
             category: "",
@@ -21,7 +20,9 @@ export default class PortfolioForm extends Component {
             banner_image: "",
             thumb_image: "",
             logo: "",
-            dropdown_categories: []
+            editMode: false,
+            apiUrl: 'https://maxwhipple.devcamp.space/portfolio/portfolio_items',
+            apiAction: "post"
 
         }
 
@@ -44,6 +45,7 @@ export default class PortfolioForm extends Component {
 
     // these handle successful image uploads for dropzone
     handleThumbDrop () {
+        console.log(this.state.thumb_image_url)
         return {
             addedfile: file => this.setState({thumb_image: file})
         }
@@ -78,21 +80,6 @@ export default class PortfolioForm extends Component {
         }
     }
 
-    // The dropdown menu uses this data
-    // Pre: takes in the portfolio items
-    // Post: finds each unique category and updates state
-    generateUniqueCategories(items) {
-        var unique = []
-        var length_ar = items.length
-        for(let i = 0; i < length_ar; i++) {
-            var temp_category = items[i].category
-            if(!unique.includes(temp_category)){unique.push(temp_category)}
-        }
-        this.setState({
-            dropdown_categories: unique
-        })
-    }
-
     // Pre: Uses this.state
     // Post: Builds out a FormData sheet with this.state information which can communicate with the API
     buildForm() {
@@ -109,7 +96,7 @@ export default class PortfolioForm extends Component {
         if (this.state.banner_image) {
             formData.append("portfolio_item[banner_image]", this.state.banner_image)
         }
-        if (this.state.logo) {
+        if (this.state.logo_url) {
             formData.append("portfolio_item[logo]", this.state.logo)
         }
 
@@ -117,14 +104,16 @@ export default class PortfolioForm extends Component {
 
     }
 
-    // Pre: none
-    // Post: When the submit button is pressed, the form is submitted. 
+    // submits the form
     handleOnSubmit(event) {
         event.preventDefault();
-        // https://maxwhipple.devcamp.space/portfolio/portfolio_items
-        axios.post("https://maxwhipple.devcamp.space/portfolio/portfolio_items", this.buildForm(), { withCredentials: true })
-        .then(response => {
-            this.props.handleSuccessfulFormSubmission(response.data.portfolio_item);
+        axios({
+            method: this.state.apiAction, // axios methods: post, patch, delete
+            url: this.state.apiUrl,
+            data: this.buildForm(),
+            withCredentials: true
+        }).then(response => {
+            this.props.handleSuccessfulFormSubmission(response.data.portfolio_item, this.state.editMode);
 
             // clears the images from dropzone
             [this.thumb_ref, this.banner_ref, this.logo_ref].forEach(ref => {
@@ -132,17 +121,16 @@ export default class PortfolioForm extends Component {
             })
 
             this.setState({
+                id: 0,
                 name: "",
                 description: "",
-                category: this.portfolioItems[0].category,
+                category: "",
                 position: 0,
                 url: "",
                 banner_image: "",
                 thumb_image: "",
-                logo: "",
-                dropdown_categories: []
+                logo_url: "",
             })
-
 
         }).catch(error => {
             console.log(error)
@@ -150,20 +138,48 @@ export default class PortfolioForm extends Component {
     }
 
     // Pre: None
-    // Post: When any of the inputs are changed, it updates state according
+    // Post: When any of the form <input> tags are changed, it updates state accordingly
     handleChange(event) {
         this.setState({
-            [event.target.name]: event.target.value
+            [event.target.name]: event.target.value,
         })
+        console.log(event.target.value)
     }
 
-    // runs only when the new data has been sent it
     componentDidUpdate (prevProps, prevState) {
-        if(prevProps !== this.props){
-            this.generateUniqueCategories(this.props.portfolioItems);
+        // if a non-empty portfolioToEdit object was passed in
+        if(Object.keys(this.props.portfolioToEdit).length > 0) {
+            const {
+                id, 
+                name,
+                description,
+                category,
+                position,
+                url,
+                thumb_image_url,
+                banner_image_url,
+                logo_url
+            } = this.props.portfolioToEdit;
+
+            // prevents infinite loop
+            this.props.clearPortfolioToEdit(); 
+
+            // populates form
             this.setState({
-                category: this.props.portfolioItems[0].category
+                id: id,
+                name: name || "",
+                description: description || "",
+                category: category || "",
+                position:position ||  0,
+                url: url || "",
+                editMode: true,
+                apiUrl: `https://maxwhipple.devcamp.space/portfolio/portfolio_items/${id}`,
+                apiAction: "patch",
+                thumb_image: thumb_image_url || "",
+                banner_image: banner_image_url || "",
+                logo: logo_url || ""
             })
+            console.log(this.state.category, "after press")
         }
     }
 
@@ -183,6 +199,7 @@ export default class PortfolioForm extends Component {
                         name="position"
                         type="number"
                         pattern = "\d*"
+                        min={0}
                         placeholder="Portfolio position"
                         value={this.state.position}
                         onChange={this.handleChange}
@@ -199,9 +216,17 @@ export default class PortfolioForm extends Component {
 
                     
                         <select name="category" value={this.state.category} onChange={this.handleChange}>
-                            {this.state.dropdown_categories.map(el => {
-                                return(<option value={el} key={el} onClick={this.handleDropdownSelection}>{el}</option>)
-                                })}
+                            
+                            {/* option is hidden, but is displayed as the selected category*/}
+                            {/* needed for the edit-button feature */}
+                            <option style={{display: "none"}}> 
+                                {this.state.category === "" ? "Please select a category" : `${this.state.category}` }
+                            </option>
+
+                            <option value="Business">Business</option>
+                            <option value="eCommerce">eCommerce</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Education">Education</option>
                         </select>
                                
                     </div>
@@ -215,38 +240,64 @@ export default class PortfolioForm extends Component {
                         <div className="image-uploaders">
 
                             {/* Thumb Image */}
-                            <DropzoneComponent 
-                            ref = {this.thumb_ref}
-                            config={this.componentConfig()}
-                            djsConfig={this.djsConfig()}
-                            eventHandlers={this.handleThumbDrop()}
-                            >
-                                <div className="dx-message">Thumbnail</div>
-                                <div className="dx-default dz-message"></div>
-                            </DropzoneComponent>
+                            {this.state.thumb_image && this.state.editMode ?
+                                <div className="replaced-image-link">
+                                    <a href={this.state.thumb_image} target="_blank">
+                                        <img src={this.state.thumb_image}></img>
+                                    </a>
+                                </div> :
+                                <DropzoneComponent 
+                                ref = {this.thumb_ref}
+                                config={this.componentConfig()}
+                                djsConfig={this.djsConfig()}
+                                eventHandlers={this.handleThumbDrop()}
+                                >
+                                    <div className="dx-message">Thumbnail</div>
+
+                                    {/* disables default message */}
+                                    <div className="dx-default dz-message"></div> 
+
+                                </DropzoneComponent>
+                            }       
 
                             {/* Banner Image */}
-                            <DropzoneComponent 
-                            ref = {this.banner_ref}
-                            config={this.componentConfig()}
-                            djsConfig={this.djsConfig()}
-                            eventHandlers={this.handleBannerDrop()}
-                            >
-                                <div className="dx-message">Banner</div>
-                                <div className="dx-default dz-message"></div>
-                            </DropzoneComponent>
+                            {this.state.banner_image && this.state.editMode ?
+
+                                <div className="replaced-image-link">
+                                    <a href={this.state.banner_image} target="_blank" className="replaced-link-image-wrapper">
+                                        <img src={this.state.banner_image}></img>
+                                    </a>
+                                </div> :
+                                <DropzoneComponent 
+                                ref = {this.banner_ref}
+                                config={this.componentConfig()}
+                                djsConfig={this.djsConfig()}
+                                eventHandlers={this.handleBannerDrop()}
+                                >
+                                    <div className="dx-message">Banner</div>
+                                    <div className="dx-default dz-message"></div>
+                                </DropzoneComponent>
+                            }
 
                             {/* Logo Image */}
-                            <DropzoneComponent 
-                            ref = {this.logo_ref}
-                            config={this.componentConfig()}
-                            djsConfig={this.djsConfig()}
-                            eventHandlers={this.handleLogoDrop()}
-                            >
-                                <div className="dx-message">Logo</div>
-                                <div className="dx-default dz-message"></div>
+                            {this.state.logo && this.state.editMode ?
+                                <div className="replaced-image-link">
+                                    <a href={this.state.logo} target="_blank">
+                                        <img src={this.state.logo}></img>
+                                    </a>
+                                </div> :
 
-                            </DropzoneComponent>
+                                <DropzoneComponent 
+                                ref = {this.logo_ref}
+                                config={this.componentConfig()}
+                                djsConfig={this.djsConfig()}
+                                eventHandlers={this.handleLogoDrop()}
+                                >
+                                    <div className="dx-message">Logo</div>
+                                    <div className="dx-default dz-message"></div>
+
+                                </DropzoneComponent>
+                            }
                         </div>
 
                         <button type="submit" onClick={this.handleOnSubmit}>Submit</button>

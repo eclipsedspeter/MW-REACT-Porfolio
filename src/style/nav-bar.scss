@@ -13,13 +13,16 @@
     margin: 10px;
 }
 
+// navigation content
 .app > .page-container > .navigation-container > .navigation-content {
     font-size: 20px;
     width: 100%;
     margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-// navigation content
 .app > .page-container > .navigation-container > .navigation-content a{
     margin-left: var(--navbar-element-spacing);
     margin-right: var(--navbar-element-spacing);
@@ -31,9 +34,6 @@
     transition: all var(--transition-time);
     border: none;
     border-bottom: 3px solid transparent;
-
-
-
 }
 
 // navigation content button
@@ -50,6 +50,15 @@
     border: none;
     border-bottom: 3px solid transparent;
     transition: var(--transition-time);
+}
+
+// right side navbar styles... mainly to fix the spacing
+#right-navbar-signout-wrapper {
+    width: 9%;
+}
+
+#right-navbar-signout-wrapper button,a {
+    margin: 0px;
 }
 
 // hover states

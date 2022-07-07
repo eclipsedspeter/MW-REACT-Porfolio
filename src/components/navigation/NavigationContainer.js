@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 import axios from "axios";
 import { withRouter } from "react-router";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 const NavigationContainer = props => {
 
@@ -26,18 +28,22 @@ const NavigationContainer = props => {
     
     return (
         <div className="navigation-content">
-            <NavLink exact to="/" activeClassName="nav-link-active">Home</NavLink>
-            <NavLink to="/about-me" activeClassName="nav-link-active">About Me</NavLink>
-            <NavLink to="/contact" activeClassName="nav-link-active">Contact</NavLink>
-            <NavLink to="/blog" activeClassName="nav-link-active">Blog</NavLink>
-            
-            {/* Checks to see if user is admin and if so, renders "add blog" button */}
-            {props.admin ? dynamicLink("/blog-manager", "Blog | M") : ""}
-            {props.admin ? dynamicLink("/portfolio-manager", "Portfolio | M") : ""}
+            <div className="left-navbar-link-wrapper">
+                <NavLink exact to="/" activeClassName="nav-link-active">Home</NavLink>
+                <NavLink to="/about-me" activeClassName="nav-link-active">About Me</NavLink>
+                <NavLink to="/contact" activeClassName="nav-link-active">Contact</NavLink>
+                <NavLink to="/blog" activeClassName="nav-link-active">Blog</NavLink>
+                
+                {/* Checks to see if user is admin and if so, renders "add blog" button */}
+                {props.admin ? dynamicLink("/blog-manager", "Blog | M") : ""}
+                {props.admin ? dynamicLink("/portfolio-manager", "Portfolio | M") : ""}
+            </div>
 
-            {props.admin ? <button onClick={handleLogOut}>Sign Out</button> : ""}
-            {/* <button onClick={handleLogOut}>Sign Out</button> */}
-
+            {props.admin ? 
+                <div id="right-navbar-signout-wrapper">
+                    <button onClick={handleLogOut}>Sign Out</button>
+                    <a onClick={handleLogOut}><FontAwesomeIcon icon="sign-out-alt"></FontAwesomeIcon></a>
+                </div>: ""}
         </div>
     )};
 

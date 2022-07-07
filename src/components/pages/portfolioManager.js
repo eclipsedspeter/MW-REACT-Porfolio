@@ -7,17 +7,36 @@ export default class PortfolioManager extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            portfolioItems: []
+            portfolioItems: [],
+            portfolioToEdit: {}
         }
 
         this.getItems = this.getItems.bind(this);
         this.handleSuccessfulFormSubmission = this.handleSuccessfulFormSubmission.bind(this)
         this.handleFormSubmissionError = this.handleFormSubmissionError.bind(this);
         this.handleDeleteClick = this.handleDeleteClick.bind(this);
+        this.handleEditClick = this.handleEditClick.bind(this);
+        this.clearPortfolioToEdit = this.clearPortfolioToEdit.bind(this);
+    }
+
+    // runs after the form.js state has been updated
+    // this is to prevent an infinite loop
+    clearPortfolioToEdit () {
+        this.setState({
+            portfolioToEdit: {}
+        })
+    }
+
+    // handles when the edit button is pressed
+    handleEditClick (portfolioItem) {
+        this.setState ({
+            portfolioToEdit: portfolioItem
+        });
     }
 
     // Pre: takes in the portfolioItem to be deleted
-    // Post: updates the API
+    // Post: deletes the portfolioItem from the API
+    // Uses: axios
     handleDeleteClick(portfolioItem) {
         axios.delete(`https://api.devcamp.space/portfolio/portfolio_items/${portfolioItem.id}`, { withCredentials: true })
         .then(response => {
@@ -34,11 +53,19 @@ export default class PortfolioManager extends Component {
         })
     }
 
-    // adds the portfolioItem at the top of the sidebar
-    handleSuccessfulFormSubmission (portfolioItem) {
-        this.setState({
-            portfolioItems: [portfolioItem].concat(this.state.portfolioItems) // adds new item at the beginning of the sidebar list
-        })
+    // Pre: takes in portfolioItem to be added and editMode(boolean)
+    // Post: adds the new portfolioItem at the top of the sidebar depending on editMode
+    handleSuccessfulFormSubmission (portfolioItem, editMode) {
+
+        // prevents creating a new portfolio item when editing existing item
+        if(!editMode){
+            this.setState({
+                portfolioItems: [portfolioItem].concat(this.state.portfolioItems) // adds new item at the beginning of the sidebar list
+            })
+        } 
+
+        window.location.reload(); // updates the sidebar with new data... reloads the page
+      
     }
 
     handleFormSubmissionError(error) {
@@ -67,13 +94,15 @@ export default class PortfolioManager extends Component {
                 <Form 
                     handleFormSubmissionError = {this.handleFormSubmissionError}
                     handleSuccessfulFormSubmission = {this.handleSuccessfulFormSubmission} 
-                    portfolioItems = {this.state.portfolioItems}
+                    clearPortfolioToEdit = {this.clearPortfolioToEdit}
+                    portfolioToEdit = {this.state.portfolioToEdit}
                     />
 
                 <div className="side-bar">
                     <PortfolioSidebarList 
-                    data={this.state.portfolioItems}
+                    portfolioItems={this.state.portfolioItems}
                     handleDeleteClick = {this.handleDeleteClick}
+                    handleEditClick = {this.handleEditClick}
                     />
                 </div>
             </div>
