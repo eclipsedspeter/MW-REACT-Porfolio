@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import DropzoneComponent from "react-dropzone-component";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 import "../../../../node_modules/react-dropzone-component/styles/filepicker.css";
 import "../../../../node_modules/dropzone/dist/min/dropzone.min.css";
@@ -29,6 +31,7 @@ export default class PortfolioForm extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleOnSubmit = this.handleOnSubmit.bind(this);
         this.buildForm = this.buildForm.bind(this);
+        this.deleteImage = this.deleteImage.bind(this);
 
         this.componentConfig = this.componentConfig.bind(this);
         this.djsConfig = this.djsConfig.bind(this);
@@ -45,7 +48,6 @@ export default class PortfolioForm extends Component {
 
     // these handle successful image uploads for dropzone
     handleThumbDrop () {
-        console.log(this.state.thumb_image_url)
         return {
             addedfile: file => this.setState({thumb_image: file})
         }
@@ -103,6 +105,18 @@ export default class PortfolioForm extends Component {
         return formData
 
     }
+
+    deleteImage(imageType) {
+        axios.delete(`https://api.devcamp.space/portfolio/delete-portfolio-image/${this.state.id}?image_type=${imageType}`,
+        {withCredentials: true})
+        .then(response => {
+            this.setState({
+                [`${imageType}_url`] : ""
+            })
+        }).catch(error => {
+            console.log(error);
+        })
+    };
 
     // submits the form
     handleOnSubmit(event) {
@@ -175,11 +189,10 @@ export default class PortfolioForm extends Component {
                 editMode: true,
                 apiUrl: `https://maxwhipple.devcamp.space/portfolio/portfolio_items/${id}`,
                 apiAction: "patch",
-                thumb_image: thumb_image_url || "",
-                banner_image: banner_image_url || "",
-                logo: logo_url || ""
+                thumb_image_url: thumb_image_url || "",
+                banner_image_url: banner_image_url || "",
+                logo_url: logo_url || ""
             })
-            console.log(this.state.category, "after press")
         }
     }
 
@@ -240,12 +253,18 @@ export default class PortfolioForm extends Component {
                         <div className="image-uploaders">
 
                             {/* Thumb Image */}
-                            {this.state.thumb_image && this.state.editMode ?
-                                <div className="replaced-image-link">
-                                    <a href={this.state.thumb_image} target="_blank">
-                                        <img src={this.state.thumb_image}></img>
-                                    </a>
+                            {this.state.thumb_image_url && this.state.editMode ?
+                                <div className="portfolio-manager-image-wrapper"> 
+                                     <div className="dropper-replace-image">
+                                        <img src={this.state.thumb_image_url}></img>
+                                    </div>
+                                    <div className="image-delete-icon">
+                                        <a onClick={() => this.deleteImage("thumb_image")}>
+                                            <FontAwesomeIcon icon="trash" id="sidebar-delete-icon"/>
+                                        </a>
+                                    </div>
                                 </div> :
+
                                 <DropzoneComponent 
                                 ref = {this.thumb_ref}
                                 config={this.componentConfig()}
@@ -261,13 +280,20 @@ export default class PortfolioForm extends Component {
                             }       
 
                             {/* Banner Image */}
-                            {this.state.banner_image && this.state.editMode ?
+                            {this.state.banner_image_url && this.state.editMode ?
 
-                                <div className="replaced-image-link">
-                                    <a href={this.state.banner_image} target="_blank" className="replaced-link-image-wrapper">
-                                        <img src={this.state.banner_image}></img>
-                                    </a>
+                                <div className="portfolio-manager-image-wrapper"> 
+                                    <div className="dropper-replace-image">
+                                        <img src={this.state.banner_image_url}></img>
+                                    </div>
+                                    <div className="image-delete-icon">
+                                        <a onClick={() => this.deleteImage("banner_image")}>
+                                            <FontAwesomeIcon icon="trash" id="sidebar-delete-icon"/>
+                                        </a>
+                                    </div>
+        
                                 </div> :
+
                                 <DropzoneComponent 
                                 ref = {this.banner_ref}
                                 config={this.componentConfig()}
@@ -280,12 +306,17 @@ export default class PortfolioForm extends Component {
                             }
 
                             {/* Logo Image */}
-                            {this.state.logo && this.state.editMode ?
-                                <div className="replaced-image-link">
-                                    <a href={this.state.logo} target="_blank">
-                                        <img src={this.state.logo}></img>
-                                    </a>
-                                </div> :
+                            {this.state.logo_url && this.state.editMode ?
+                                <div className="portfolio-manager-image-wrapper"> 
+                                     <div className="dropper-replace-image">
+                                        <img src={this.state.logo_url}></img>
+                                    </div>
+                                    <div className="image-delete-icon">
+                                        <a onClick={() => this.deleteImage("logo")}>
+                                            <FontAwesomeIcon icon="trash" id="sidebar-delete-icon"/>
+                                        </a>
+                                    </div>
+                                </div>:
 
                                 <DropzoneComponent 
                                 ref = {this.logo_ref}

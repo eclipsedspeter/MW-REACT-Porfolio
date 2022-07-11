@@ -17,6 +17,11 @@ export default class PortfolioManager extends Component {
         this.handleDeleteClick = this.handleDeleteClick.bind(this);
         this.handleEditClick = this.handleEditClick.bind(this);
         this.clearPortfolioToEdit = this.clearPortfolioToEdit.bind(this);
+        this.handleImageDelete = this.handleImageDelete.bind(this);
+    }
+
+    handleImageDelete () {
+
     }
 
     // runs after the form.js state has been updated
@@ -96,6 +101,7 @@ export default class PortfolioManager extends Component {
                     handleSuccessfulFormSubmission = {this.handleSuccessfulFormSubmission} 
                     clearPortfolioToEdit = {this.clearPortfolioToEdit}
                     portfolioToEdit = {this.state.portfolioToEdit}
+                    handleImageDelete = {this.handleImageDelete}
                     />
 
                 <div className="side-bar">

@@ -22,6 +22,7 @@ import Auth from './pages/auth';
 import NoMatch from './pages/noMatch';
 import BlogManager from './pages/blogManager';
 import PortfolioManager from './pages/portfolioManager';
+import BlogDetail from "./pages/blogDetail";
 
 library.add(faTrash, faSignOutAlt, faEdit);
 
@@ -121,6 +122,7 @@ export default class App extends Component {
               <Route path="/about-me" component={About}></Route>
               <Route path="/blog" component={Blog}></Route>
               <Route path="/contact" component={Contact}></Route>
+              <Route path="/b/:slug" component={BlogDetail}></Route>
 
               {this.state.admin ? this.authorizedRoutes() : null}
 

@@ -46,25 +46,52 @@
         }
 
         .bottom-area-wrapper > .image-uploaders {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 300px 300px 300px;
+            width: 100%;
+            grid-gap: 15px;
+            height: 400px;
+        
         }
 
-        .bottom-area-wrapper > .image-uploaders > .replaced-image-link a {
-            cursor: zoom-in;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0px;
-        }
-
-        .bottom-area-wrapper > .image-uploaders > .replaced-image-link img {
-            object-fit: fill;
+        .bottom-area-wrapper > .image-uploaders > .portfolio-manager-image-wrapper {
+            display: grid;
+            align-self: center;
+            grid-template-rows: 200px;
             padding: 0px;
             margin: 0px;
             width: 100%;
-        }
+            height: 200px;
+            
+            .dropper-replace-image {
+                padding: 0px;
+                margin: 0px;
+                width: 100%;
+                
+                img {
+                    padding: 0px;
+                    margin: 0px;
+                    height: 200px;
+                    width: 100%;
+                    border-radius: 5px;
+                    background-color: rgba(131, 131, 131, 0.63);
+                }
+            }
 
+            .image-delete-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0px;
+                margin: 0px;
+
+                a {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
 
         .bottom-area-wrapper button {
             width: 20%; 
